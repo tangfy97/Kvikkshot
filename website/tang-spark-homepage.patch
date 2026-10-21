@@ -1,0 +1,68 @@
+diff --git a/index.html b/index.html
+index 0d742fc..a4e13e1 100644
+--- a/index.html
++++ b/index.html
+@@ -30,6 +30,10 @@
+                 <strong>Echoknot</strong>
+                 <span>Language memory app for iOS</span>
+               </a>
++              <a href="./kvikkshot.html">
++                <strong>Kvikkshot</strong>
++                <span>Video screenshots for Mac</span>
++              </a>
+             </div>
+           </details>
+           <a href="#approach">Approach</a>
+@@ -86,9 +90,9 @@
+         <section id="products" class="band">
+           <div class="section-head">
+             <h2>Apps</h2>
+-            <p>We are building a family of focused apps. Echoknot is our first public product, shaped around language memory, privacy, and repeated daily use.</p>
++            <p>We are building a family of focused apps. Echoknot helps with language memory on iOS; Kvikkshot makes screenshots from videos on the Mac. Both are private by design and made for repeated daily use.</p>
+           </div>
+-          <div class="product-grid">
++          <div class="product-grid product-grid-pair">
+             <article class="product-panel">
+               <div>
+                 <h3>Echoknot</h3>
+@@ -99,6 +103,16 @@
+                 <a class="button button-secondary" href="./echoknot-support.html">Support, privacy, terms</a>
+               </div>
+             </article>
++            <article class="product-panel">
++              <div>
++                <h3>Kvikkshot</h3>
++                <p>A Mac app that turns videos into screenshots the moment you drop them in, and those screenshots into one image to share. Free, and entirely on your Mac.</p>
++              </div>
++              <div class="action-row">
++                <a class="button button-primary" href="./kvikkshot.html">Open Kvikkshot page</a>
++                <a class="button button-secondary" href="./kvikkshot-support.html">Support, privacy, terms</a>
++              </div>
++            </article>
+             <article class="product-panel secondary">
+               <div>
+                 <h3>More ideas</h3>
+diff --git a/styles.css b/styles.css
+index a5a9fd6..dbed62c 100644
+--- a/styles.css
++++ b/styles.css
+@@ -1488,3 +1488,19 @@ h3 {
+     font-size: clamp(2.1rem, 10vw, 3.15rem);
+   }
+ }
++
++/* Two apps side by side, with "More ideas" as a strip underneath */
++.product-grid.product-grid-pair {
++  grid-template-columns: repeat(2, minmax(0, 1fr));
++}
++
++.product-grid.product-grid-pair .product-panel.secondary {
++  grid-column: 1 / -1;
++  min-height: 0;
++}
++
++@media (max-width: 700px) {
++  .product-grid.product-grid-pair {
++    grid-template-columns: 1fr;
++  }
++}

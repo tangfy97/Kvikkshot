@@ -1,31 +1,44 @@
-name: QuickShots
+name: Kvikkshot
 options:
   deploymentTarget:
     macOS: "14.0"
   developmentLanguage: en
+# Release is the website build (Developer ID, notarized); AppStore is the Mac App Store build.
+# Both run in the App Sandbox with no network entitlement. They differ only in how they are
+# signed and in the Help menu, where the website build links to its download page for updates.
+configs:
+  Debug: debug
+  Release: release
+  AppStore: release
 settings:
   base:
-    MARKETING_VERSION: "1.0"
+    MARKETING_VERSION: "1.0.0"
     CURRENT_PROJECT_VERSION: "1"
     SWIFT_VERSION: "5.0"
     LOCALIZATION_PREFERS_STRING_CATALOGS: YES
     SWIFT_EMIT_LOC_STRINGS: YES
 targets:
-  QuickShots:
+  Kvikkshot:
     type: application
     platform: macOS
     sources:
-      - path: QuickShots
+      - path: Kvikkshot
     settings:
+      configs:
+        AppStore:
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: APPSTORE
       base:
-        # Change to your own reverse-DNS ID and Team before the first App Store upload
-        PRODUCT_BUNDLE_IDENTIFIER: com.feiyangtang.QuickShots
+        PRODUCT_BUNDLE_IDENTIFIER: com.feiyangtang.Kvikkshot
+        # The release scripts pass the team (X933P26489) and signing identity; local builds sign ad hoc.
         DEVELOPMENT_TEAM: ""
         CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGN_ENTITLEMENTS: Kvikkshot.entitlements
         INFOPLIST_FILE: Info.plist
         GENERATE_INFOPLIST_FILE: YES
-        INFOPLIST_KEY_CFBundleDisplayName: QuickShots
+        INFOPLIST_KEY_CFBundleDisplayName: Kvikkshot
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.photography
+        INFOPLIST_KEY_NSHumanReadableCopyright: "Copyright © 2026 TangSpark."
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ENABLE_APP_SANDBOX: YES
         ENABLE_USER_SELECTED_FILES: readwrite
