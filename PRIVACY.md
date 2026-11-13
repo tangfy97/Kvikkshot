@@ -2,7 +2,7 @@
 
 *Last updated: 21 October 2026*
 
-Kvikkshot is a macOS app for taking screenshots from videos, made by TangSpark. This policy covers every version of Kvikkshot: the Mac App Store version and the one downloaded from tang-spark.no.
+Kvikkshot is a macOS app for taking screenshots from videos, made by TangSpark. This policy covers every version of Kvikkshot: the Mac App Store version and the one downloaded from GitHub.
 
 **Kvikkshot collects no data.** It has no network access at all; the operating system's App Sandbox does not allow it to connect to the internet. There are no accounts, analytics, telemetry, crash reporting, advertising, or update checks, and no third-party code.
 

@@ -1,12 +1,16 @@
 #!/bin/zsh
-# Copies the Kvikkshot pages and the notarized disk image into a checkout of the tang-spark.no site,
-# ready to review and push (Netlify deploys the site from its main branch).
+# Copies the Kvikkshot pages into a checkout of the tang-spark.no site, ready to review and push
+# (Netlify deploys the site from its main branch). The site hosts no installers: the download buttons
+# go to https://github.com/tangfy97/Kvikkshot/releases/latest, and the site's netlify.toml sends the old
+# /kvikkshot/download links there too.
 #
 #   scripts/release.sh                                   # first: build/release/Kvikkshot-<version>.dmg
+#   gh release create v<version> ...                     # then publish it on GitHub (docs/WEBSITE.md)
 #   scripts/publish-website.sh ~/Documents/tang-spark.no
 #
-# It writes kvikkshot*.html, kvikkshot.css, kvikkshot/ (images), downloads/Kvikkshot-<version>.dmg,
-# and points /kvikkshot/download at that disk image in netlify.toml. It never commits or pushes.
+# The pages print the disk image's size and SHA-256, so this checks that the local disk image is the one
+# in the GitHub release. It writes kvikkshot*.html, kvikkshot.css, kvikkshot/ and img/kvikkshot-*.
+# It never copies a disk image, edits netlify.toml, commits or pushes.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -20,30 +24,20 @@ if ! xcrun stapler validate -q "$dmg" 2>/dev/null; then
   echo "error: $dmg is not notarized; publish only what scripts/release.sh built with notarization" >&2
   exit 1
 fi
+released=$(gh release view "v$version" --repo tangfy97/Kvikkshot --json assets \
+  --jq ".assets[] | select(.name == \"Kvikkshot-$version.dmg\") | .digest" 2>/dev/null || true)
+if [[ $released != "sha256:$(shasum -a 256 "$dmg" | cut -d' ' -f1)" ]]; then
+  echo "error: $dmg is not the disk image in GitHub release v$version; publish that release first" >&2
+  exit 1
+fi
 
-/usr/bin/python3 website/generate.py
+/usr/bin/python3 -I website/generate.py
 cp website/dist/*.html "$site/"
 cp website/static/kvikkshot.css "$site/"
-mkdir -p "$site/kvikkshot" "$site/downloads"
+mkdir -p "$site/kvikkshot"
 cp website/static/kvikkshot/* "$site/kvikkshot/"
-cp "$dmg" "$site/downloads/"
+# The English page uses the site's shared img/ folder, like the other Plakat pages
+cp website/static/kvikkshot/icon-256.png "$site/img/kvikkshot-icon.png"
+cp website/static/kvikkshot/screenshot-en.jpg "$site/img/kvikkshot-shot.jpg"
 
-# One redirect, so links to /kvikkshot/download always give the latest disk image
-/usr/bin/python3 - "$site/netlify.toml" "$version" <<'EOF'
-import re, sys
-path, version = sys.argv[1], sys.argv[2]
-toml = open(path).read()
-block = f'''# kvikkshot-download (managed by Kvikkshot's scripts/publish-website.sh)
-[[redirects]]
-  from = "/kvikkshot/download"
-  to = "/downloads/Kvikkshot-{version}.dmg"
-  status = 302
-  force = true
-# end kvikkshot-download
-'''
-pattern = re.compile(r"# kvikkshot-download.*?# end kvikkshot-download\n", re.S)
-toml = pattern.sub(block, toml) if pattern.search(toml) else toml.rstrip("\n") + "\n\n" + block
-open(path, "w").write(toml)
-EOF
-
-echo "Copied Kvikkshot $version into $site. Review with 'git -C $site status', then commit and push."
+echo "Copied the Kvikkshot $version pages into $site. Review with 'git -C $site status', then commit and push."

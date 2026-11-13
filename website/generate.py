@@ -5,7 +5,11 @@
 
 scripts/publish-website.sh runs this and copies the result into a tang-spark.no checkout (see
 docs/WEBSITE.md). Edit the copy below, not the generated HTML. The version comes from project.yml,
-and the download size and checksum from the notarized disk image in build/release.
+and the download size and checksum from the notarized disk image in build/release. Downloads are
+GitHub releases; the site hosts no installers.
+
+The English product page uses the site's Plakat layout (styles.css). The Chinese product pages and the
+support pages keep the earlier launch layout, which the site now serves as legacy.css.
 """
 import hashlib
 import html
@@ -23,6 +27,7 @@ else:
     DMG_SIZE = "1 MB"
     print(f"warning: {DMG.relative_to(ROOT)} not found; run scripts/release.sh first. The checksum line is left out.")
 APP_STORE_URL = ""  # https://apps.apple.com/app/id… once the app is live; the button stays hidden until then
+DOWNLOAD_URL = "https://github.com/tangfy97/Kvikkshot/releases/latest"
 
 OUT = pathlib.Path(__file__).parent / "dist"
 
@@ -70,7 +75,7 @@ LANGS = {
         dl_title="Download Kvikkshot",
         dl_meta=f"Version {VERSION} · macOS 14 Sonoma or later · Apple silicon and Intel · {DMG_SIZE}",
         dl_note="Signed and notarized by Apple. Open the disk image and drag Kvikkshot to Applications.",
-        dl_button="Download for Mac (.dmg)", store_button="Mac App Store",
+        dl_button="Download from GitHub", store_button="Mac App Store",
         sha_label="SHA-256",
         up_to_date="You have the latest version.",
         update_available="Version {latest} is available. You have {installed}.",
@@ -94,7 +99,7 @@ LANGS = {
              ("How do I update?", "The Mac App Store version updates through the App Store. In the downloaded version, choose Help › Check for a New Version; it opens this website in your browser, because Kvikkshot itself never goes online."),
              ("How do I uninstall it?", "Drag Kvikkshot from Applications to the Bin. Its settings are in ~/Library/Containers/com.feiyangtang.Kvikkshot, which you can delete too.")],
         privacy_title="Privacy policy",
-        privacy_updated="Last updated 21 October 2026. This policy covers the Mac App Store version and the version downloaded from this website.",
+        privacy_updated="Last updated 21 October 2026. This policy covers the Mac App Store version and the version downloaded from GitHub.",
         privacy=["<strong>Kvikkshot collects no data.</strong> It has no network access: the App Sandbox does not let it connect to the internet. There are no accounts, analytics, telemetry, crash reporting, advertising or update checks, and no third-party code.",
                  "It reads the videos you open, keeps the screenshots it makes in its own temporary folder while you work, and writes files only where you export or save them. It remembers your settings, the last folder you exported to and, if you choose one, your default export folder. All of this stays on your Mac.",
                  "Links in the Help menu open in your browser, outside Kvikkshot. “Check for a New Version” tells this page which version you have, so it can say whether a newer one exists.",
@@ -131,7 +136,7 @@ LANGS = {
         dl_title="下载 Kvikkshot",
         dl_meta=f"版本 {VERSION} · macOS 14 Sonoma 或更新 · Apple 芯片和 Intel · {DMG_SIZE}",
         dl_note="已由 Apple 签名并公证。打开磁盘映像，把 Kvikkshot 拖到“应用程序”文件夹即可。",
-        dl_button="下载 Mac 版（.dmg）", store_button="Mac App Store",
+        dl_button="从 GitHub 下载", store_button="Mac App Store",
         sha_label="SHA-256",
         up_to_date="你用的已经是最新版本。",
         update_available="新版本 {latest} 已发布，你现在用的是 {installed}。",
@@ -151,10 +156,10 @@ LANGS = {
              ("有些截图显示无法读取。", "视频在那些位置有损坏，或者文件还在复制或下载中。Kvikkshot 会用新的解码器把每一张缺失的截图重试一遍，实在读不出来才会告诉你缺了几张，而不会卡住。"),
              ("导出的截图放在哪里？", "导出时会让你选一个文件夹，然后在里面为每个视频新建一个“… 截图”文件夹。如果不想每次都选，可以在“设置”里设一个默认文件夹。"),
              ("我的截图会被保存在什么地方吗？", "只在你使用时放在 Kvikkshot 私有的临时文件夹里。返回首页、退出时都会清空；如果 Kvikkshot 意外退出，下次启动时也会先清空。"),
-             ("怎么更新？", "App Store 版通过 App Store 更新。官网下载的版本，选择“帮助 › 检查新版本”，会用浏览器打开本网站；Kvikkshot 本身从不联网。"),
+             ("怎么更新？", "App Store 版通过 App Store 更新。从 GitHub 下载的版本，选择“帮助 › 检查新版本”，会用浏览器打开本网站；Kvikkshot 本身从不联网。"),
              ("怎么卸载？", "把 Kvikkshot 从“应用程序”拖到废纸篓即可。设置保存在 ~/Library/Containers/com.feiyangtang.Kvikkshot，也可以一并删除。")],
         privacy_title="隐私政策",
-        privacy_updated="最后更新：2026 年 10 月 21 日。本政策适用于 Mac App Store 版和本网站下载的版本。",
+        privacy_updated="最后更新：2026 年 10 月 21 日。本政策适用于 Mac App Store 版和从 GitHub 下载的版本。",
         privacy=["<strong>Kvikkshot 不收集任何数据。</strong>它没有联网权限：App 沙盒不允许它连接互联网。没有账号、统计、遥测、崩溃报告、广告或更新检查，也没有任何第三方代码。",
                  "它读取你打开的视频，工作时把截图放在自己的临时文件夹里，只在你导出或存储的位置写入文件。它会记住你的设置、上次导出的文件夹，以及你选择的默认导出文件夹（如果有）。这些都只保存在你的 Mac 上。",
                  "“帮助”菜单里的链接会在浏览器中打开，不经过 Kvikkshot。“检查新版本”会把你正在使用的版本号告诉本页面，以便判断有没有新版本。",
@@ -191,7 +196,7 @@ LANGS = {
         dl_title="下載 Kvikkshot",
         dl_meta=f"版本 {VERSION} · macOS 14 Sonoma 或以上 · Apple 晶片和 Intel · {DMG_SIZE}",
         dl_note="已由 Apple 簽署並完成公證。打開磁碟映像檔，把 Kvikkshot 拖到「應用程式」檔案夾即可。",
-        dl_button="下載 Mac 版（.dmg）", store_button="Mac App Store",
+        dl_button="從 GitHub 下載", store_button="Mac App Store",
         sha_label="SHA-256",
         up_to_date="你使用的已經是最新版本。",
         update_available="新版本 {latest} 已推出，你目前使用的是 {installed}。",
@@ -211,10 +216,10 @@ LANGS = {
              ("有些截圖顯示無法讀取。", "影片在那些位置有損壞，或檔案仍在拷貝或下載中。Kvikkshot 會用新的解碼器把每一張缺少的截圖重試一遍，真的讀不出來才會告訴你缺了幾張，而不會卡住。"),
              ("匯出的截圖放在哪裡？", "匯出時會請你選一個檔案夾，然後在其中為每部影片新增一個「… 截圖」檔案夾。如果不想每次都選，可以在「設定」中設定預設檔案夾。"),
              ("我的截圖會被儲存在什麼地方嗎？", "只在你使用時放在 Kvikkshot 私有的暫存檔案夾裡。返回首頁、結束時都會清空；如果 Kvikkshot 意外結束，下次啟動時也會先清空。"),
-             ("怎麼更新？", "App Store 版透過 App Store 更新。官網下載的版本，選擇「輔助說明 › 檢查新版本」，會用瀏覽器打開本網站；Kvikkshot 本身從不連網。"),
+             ("怎麼更新？", "App Store 版透過 App Store 更新。從 GitHub 下載的版本，選擇「輔助說明 › 檢查新版本」，會用瀏覽器打開本網站；Kvikkshot 本身從不連網。"),
              ("怎麼解除安裝？", "把 Kvikkshot 從「應用程式」拖到垃圾桶即可。設定儲存在 ~/Library/Containers/com.feiyangtang.Kvikkshot，也可以一併刪除。")],
         privacy_title="隱私權政策",
-        privacy_updated="最後更新：2026 年 10 月 21 日。本政策適用於 Mac App Store 版和本網站下載的版本。",
+        privacy_updated="最後更新：2026 年 10 月 21 日。本政策適用於 Mac App Store 版和從 GitHub 下載的版本。",
         privacy=["<strong>Kvikkshot 不蒐集任何資料。</strong>它沒有連網權限：App 沙盒不允許它連上網際網路。沒有帳號、統計、遙測、當機報告、廣告或更新檢查，也沒有任何第三方程式碼。",
                  "它讀取你打開的影片，使用時把截圖放在自己的暫存檔案夾裡，只在你匯出或儲存的位置寫入檔案。它會記住你的設定、上次匯出的檔案夾，以及你選擇的預設匯出檔案夾（如果有）。這些都只儲存在你的 Mac 上。",
                  "「輔助說明」選單中的連結會在瀏覽器中打開，不經過 Kvikkshot。「檢查新版本」會把你正在使用的版本號告訴本頁面，以便判斷是否有新版本。",
@@ -248,7 +253,7 @@ def head(t, title, description, page):
 {alternates}
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <link rel="apple-touch-icon" href="./kvikkshot/icon-256.png" />
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./legacy.css" />
     <link rel="stylesheet" href="./kvikkshot.css" />
   </head>"""
 
@@ -339,7 +344,7 @@ def product(t):
             <p class="kvikk-update" id="update-status" hidden></p>
           </div>
           <div class="kvikk-download-actions">
-            <a class="launch-button primary" href="./kvikkshot/download">{icon("download")}{t["dl_button"]}</a>
+            <a class="launch-button primary" href="{DOWNLOAD_URL}">{icon("download")}{t["dl_button"]}</a>
             {store}
           </div>
         </section>
@@ -430,8 +435,28 @@ def support(t):
 """
 
 
+def poster_product():
+    """The English product page, in the site's Plakat layout (styles.css), matching Spolo and Rydd."""
+    return f"""<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kvikkshot — Screenshots from video, in a blink. | TangSpark</title><meta name="description" content="Drop in a video and the screenshots are there before you can look away. Keep the ones you want, export them, or turn them into one image to share. Kvikk is Norwegian for quick.">
+<link rel="icon" type="image/svg+xml" href="./favicon.svg"><link rel="stylesheet" href="./styles.css"></head>
+<body><div class="wrap">
+<header><a class="mark" href="./index.html">TangSpark</a><nav><a href="./index.html#apps">Apps</a><a href="./kvikkshot-support.html">Support</a><a href="./kvikkshot-zh-cn.html">中文</a></nav></header>
+<div class="title"><img src="img/kvikkshot-icon.png" alt=""><span class="label">macOS 14+ · Free</span></div>
+<div class="hero-name">Kvikkshot</div>
+<section class="grid poster"><div class="block"><h1 class="cond">Screenshots from video, in a blink.</h1><p>Drop in a video and the screenshots are there before you can look away. Keep the ones you want, export them, or turn them into one image to share. Kvikk is Norwegian for quick.</p></div>
+<div class="facts"><div><span>Platform</span><span>macOS 14, Apple silicon &amp; Intel</span></div><div><span>Price</span><span>Free</span></div><div><span>Network</span><span>None at all</span></div><div><span>Languages</span><span>EN, 简体, 繁體</span></div></div></section>
+<section class="grid"><div class="big"><img src="img/kvikkshot-shot.jpg" alt="Kvikkshot with 24 frames from a fjord timelapse"></div></section>
+<section class="part rule grid cols"><h2 class="cond">What it does</h2><ul class="list"><li><b>By interval or count</b><span>One shot every few seconds, or N shots spread across the video.</span></li><li><b>Fast or precise</b><span>Keyframe mode skims an hour of 4K in seconds; precise mode is exact to the frame.</span></li><li><b>Many videos</b><span>Drop a batch; each gets its own folder on export.</span></li><li><b>Share image</b><span>One sheet with columns, light or dark, timestamps and video details.</span></li><li><b>Leaves nothing behind</b><span>Cached frames are deleted on Back, on quit and at next launch.</span></li></ul></section>
+<section id="download" class="part rule grid cols"><h2 class="cond">Get Kvikkshot</h2><div style="grid-column: 5 / span 8"><p>Signed and notarized by Apple. Open the disk image and drag Kvikkshot to Applications. Also coming to the Mac App Store.</p><div class="cta"><a class="btn red" href="{DOWNLOAD_URL}">Download from GitHub</a><a class="btn" href="./kvikkshot-support.html">Support &amp; privacy</a></div></div></section>
+<footer><span>© 2026 TangSpark</span><a href="./kvikkshot-support.html">Support &amp; privacy</a></footer>
+</div></body></html>
+"""
+
+
 OUT.mkdir(exist_ok=True)
 for t in LANGS.values():
-    (OUT / f"kvikkshot{t['suffix']}.html").write_text(product(t))
+    (OUT / f"kvikkshot{t['suffix']}.html").write_text(poster_product() if t is LANGS["en"] else product(t))
     (OUT / f"kvikkshot-support{t['suffix']}.html").write_text(support(t))
 print("wrote", ", ".join(sorted(p.name for p in OUT.glob("*.html"))))
