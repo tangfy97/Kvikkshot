@@ -1,6 +1,6 @@
 # Releasing Kvikkshot
 
-Kvikkshot ships two ways from the same code: the **Mac App Store** (the `AppStore` build configuration) and a **download on tang-spark.no** (the `Release` configuration, signed with Developer ID and notarized). Both run in the App Sandbox with no network entitlement; they differ only in signing and in the Help menu, where the website build links to its download page to check for a new version.
+Kvikkshot ships two ways from the same code: the **Mac App Store** (the `AppStore` build configuration) and a **download from GitHub**, linked from tang-spark.no (the `Release` configuration, signed with Developer ID and notarized). Both run in the App Sandbox with no network entitlement; they differ only in signing and in the Help menu, where the website build links to its download page to check for a new version.
 
 ## Every release
 
@@ -13,11 +13,12 @@ Kvikkshot ships two ways from the same code: the **Mac App Store** (the `AppStor
    ```bash
    scripts/appstore.sh upload
    ```
-4. Website: build, sign, notarize and staple.
+4. Website: build, sign, notarize and staple, publish the disk image as a GitHub release, then update the pages (see [WEBSITE.md](WEBSITE.md) for the full commands).
    ```bash
    scripts/release.sh
+   gh release create v<version> build/release/Kvikkshot-<version>.{dmg,zip} build/release/SHA256SUMS --repo tangfy97/Kvikkshot --title "Kvikkshot <version>" --target main
+   scripts/publish-website.sh ~/Documents/tang-spark.no
    ```
-   Then copy `build/release/Kvikkshot-<version>.dmg` to `downloads/` in the tang-spark.no repo, update the version on the Kvikkshot pages (see [WEBSITE.md](WEBSITE.md)), and push.
 
 ## One-time setup
 
